@@ -1,11 +1,3 @@
-import axios from 'axios'
-import store from '@/store/index'
+import axios from 'axios';
 
-export default () => {
-  return axios.create({
-    baseURL: 'http://localhost:5000/api',
-    headers: {
-      Authorization: `JWT ${store.state.token}`
-    }
-  })
-}
+export default () => (axios.create({ baseURL: 'https://www.reddit.com/', headers: {} }));

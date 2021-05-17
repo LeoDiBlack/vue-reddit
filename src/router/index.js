@@ -11,16 +11,6 @@ const routes = [
     name: 'Home',
     component: Home,
   },
-  {
-    path: '/s/:subvuePermalink/:id',
-    name: 'Post',
-    component: () => import(/* webpackChunkName: "post" */ '@/views/Post'),
-  },
-  {
-    path: '/u/:username',
-    name: 'User',
-    component: () => import(/* webpackChunkName: "user" */ '@/views/User'),
-  },
 ];
 
 const router = new VueRouter({

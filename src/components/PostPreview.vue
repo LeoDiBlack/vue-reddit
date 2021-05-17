@@ -1,96 +1,57 @@
 <template lang="html">
-  <div class="post-preview">
-    <router-link
-      :to="{ name: 'Post', params: { subvuePermalink: post.subvue.permalink, id: post.id } }"
-      class="image-area"
+  <div class="flex flex-1 my-4">
+    <div
+      class="h-80 flex-1 bg-cover
+        rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+      :style="postImage"
+      :title="post.title"
     >
-      <div
-        :style="'background-image: url(http://localhost:5000/api/file/' + post.image + ');'"
-        class="image"
-      ></div>
-    </router-link>
-    <Vote
-      :upvotes="post.upvotes"
-      :downvotes="post.downvotes"
-      :postId="post.id"
-      @error="
-        value => {
-          error = value;
-        }
-      "
-    ></Vote>
-    <router-link
-      :to="{ name: 'Post', params: { subvuePermalink: post.subvue.permalink, id: post.id } }"
-      class="body-area"
+    </div>
+    <div
+      class="flex-1 border-r border-b border-l border-grey-light lg:border-l-0
+        lg:border-t lg:border-grey-light bg-white rounded-b lg:rounded-b-none
+        lg:rounded-r p-4 justify-between leading-normal"
     >
-      <h3><slot></slot></h3>
-      <p>
-        <span>on {{ post.created }}</span>
-        <span v-show="!hideUser"
-          >&nbsp;by <span class="blue-highlight">u/{{ post.user.username }}</span></span
-        >
-        <span v-show="!hideSubvue"
-          >&nbsp;in <span class="blue-highlight">s/{{ post.subvue.name }}</span></span
-        >
-      </p>
-      <p>{{ description }}</p>
-    </router-link>
+      <div class="mb-8">
+        <p class="text-sm text-grey-dark flex items-center">
+          {{ post.num_comments }} comments
+        </p>
+        <div class="text-black font-bold text-xl mb-2">{{ post.title }}</div>
+        <p class="text-grey-darker text-base">{{ description }}</p>
+      </div>
+      <div class="flex items-center">
+        <div class="text-sm">
+          <p class="text-black leading-none">Posted By: {{ post.author }} </p>
+          <p class="text-grey-dark">{{ hoursAgo }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Vote from "@/components/Vote";
-
 export default {
-  name: "post-preview",
-
+  name: 'post-preview',
   props: {
     post: {},
     hideUser: {
-      default: false
+      default: false,
     },
     hideSubvue: {
-      default: false
-    }
+      default: false,
+    },
   },
-
-  components: { Vote },
-
   computed: {
     description() {
-      return this.post.content.slice(0, 750) + "...";
-    }
-  }
+      return this.post.selftext ? `${this.post.selftext.slice(0, 750)}...` : '';
+    },
+    hoursAgo() {
+      return `${new Date(this.post.created * 1000).getHours()} Hours Ago`;
+    },
+    postImage() {
+      return { backgroundImage: `url('${this.post.url}')` };
+    },
+  },
 };
 </script>
-
-<style scoped lang="css">
-p {
-  margin: 5px 0;
-}
-
-.post-preview {
-  height: 150px;
-  margin-bottom: 25px;
-  display: block;
-  color: black;
-  display: grid;
-  grid-template-columns: 3fr 1fr 15fr;
-}
-
-.image {
-  width: 100%;
-  height: 150px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-}
-
-.body-area {
-  color: black;
-}
-
-.blue-highlight {
-  color: rgb(48, 99, 219);
-}
-</style>
+<style scoped lang="css"></style>
