@@ -1,18 +1,31 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+<template lang="html">
+  <div class="home container">
+    <h1>Recent Posts</h1>
+    <PostPreview v-for="post in posts" :key="post.id" :post="post">
+      {{ post.title }}
+    </PostPreview>
+
+    <CreateButton></CreateButton>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import PostPreview from '@/components/PostPreview';
+import CreateButton from '@/components/CreateButton';
 
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld,
+  name: 'home',
+
+  components: { PostPreview, CreateButton },
+
+  data() {
+    return {
+      posts: null,
+    };
   },
+
+  mounted() {},
 };
 </script>
+
+<style lang="css"></style>
