@@ -54,10 +54,10 @@ export default {
   },
   emits: ['update'],
   methods: {
-    selectPost: function() {
-      this.$emit('update', this.post)
+    selectPost: function () {
+      this.$emit('update', this.post);
     },
-  }
+  },
 };
 </script>
 <style scoped lang="css"></style>
