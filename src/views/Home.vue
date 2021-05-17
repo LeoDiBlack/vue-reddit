@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="container mx-auto">
     <div class="flex flex-wrap -mx-2 overflow-hidden sm:-mx-2">
-      <div class="flex flex-wrap w-4/12 overflow-hidden">
+      <div class="flex flex-wrap w-4/12 h-screen overflow-y-scroll">
         <div class="w-full overflow-hidden">
           <PostPreview
             v-for="post in posts"
@@ -41,7 +41,7 @@ export default {
       });
   },
   methods: {
-    onPostSelection: function(selectedPost) {
+    onPostSelection: function (selectedPost) {
       this.selectedPost = selectedPost;
     },
   },
