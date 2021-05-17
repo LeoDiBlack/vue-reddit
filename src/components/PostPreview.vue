@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="flex flex-1 my-4">
+  <div @click="selectPost" class="flex flex-1 my-4 cursor-pointer">
     <div
       class="h-80 flex-1 bg-cover
         rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
@@ -52,6 +52,12 @@ export default {
       return { backgroundImage: `url('${this.post.url}')` };
     },
   },
+  emits: ['update'],
+  methods: {
+    selectPost: function() {
+      this.$emit('update', this.post)
+    },
+  }
 };
 </script>
 <style scoped lang="css"></style>

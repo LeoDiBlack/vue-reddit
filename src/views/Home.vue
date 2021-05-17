@@ -3,12 +3,17 @@
     <div class="flex flex-wrap -mx-2 overflow-hidden sm:-mx-2">
       <div class="flex flex-wrap w-4/12 overflow-hidden">
         <div class="w-full overflow-hidden">
-          <PostPreview v-for="post in posts" :key="post.data.id" :post="post.data"/>
+          <PostPreview
+            v-for="post in posts"
+            :key="post.data.id"
+            @update="onPostSelection"
+            :post="post.data"
+          />
         </div>
       </div>
       <div class="flex flex-wrap w-8/12 overflow-hidden">
         <div class="w-full overflow-hidden">
-          <Post/>
+          <Post :post="selectedPost"/>
         </div>
       </div>
     </div>
@@ -26,6 +31,7 @@ export default {
   data() {
     return {
       posts: null,
+      selectedPost: null,
     };
   },
   mounted() {
@@ -33,6 +39,11 @@ export default {
       .then((response) => {
         this.posts = response.data.data.children;
       });
+  },
+  methods: {
+    onPostSelection: function(selectedPost) {
+      this.selectedPost = selectedPost;
+    },
   },
 };
 </script>

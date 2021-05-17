@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="flex flex-1 my-4">
-    testing
+    {{ post.title }}
   </div>
 </template>
 
