@@ -1,29 +1,30 @@
 <template lang="html">
   <div @click="selectPost" class="flex flex-1 my-4 cursor-pointer">
     <div
-      class="h-80 flex-1 bg-cover
-        rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-      :style="postImage"
+      class="h-52 flex flex-1 border-r border-b border-l border-grey-light border-l-0
+        border-t border-grey-light bg-white rounded-b rounded-b-none
+        rounded-r p-4 justify-between leading-normal"
       :title="post.title"
     >
-    </div>
-    <div
-      class="flex-1 border-r border-b border-l border-grey-light lg:border-l-0
-        lg:border-t lg:border-grey-light bg-white rounded-b lg:rounded-b-none
-        lg:rounded-r p-4 justify-between leading-normal"
-    >
-      <div class="mb-8">
+      <div class="w-6/12">
+        <img :src="post.thumbnail"
+          :width="post.thumbnail_width"
+          :height="post.thumbnail_height"
+          class="block m-auto shadow-xl"
+          :alt="post.title"
+        >
+      </div>
+      <div class="w-6/12">
         <p class="text-sm text-grey-dark flex items-center">
           {{ post.num_comments }} comments
         </p>
         <div class="text-black font-bold text-xl mb-2">{{ post.title }}</div>
         <p class="text-grey-darker text-base">{{ description }}</p>
-      </div>
-      <div class="flex items-center">
         <div class="text-sm">
           <p class="text-black leading-none">Posted By: {{ post.author }} </p>
           <p class="text-grey-dark">{{ hoursAgo }}</p>
         </div>
+        <button @click="removePost()" type="button">Remove Post</button>
       </div>
     </div>
   </div>
@@ -49,11 +50,16 @@ export default {
       return `${new Date(this.post.created * 1000).getHours()} Hours Ago`;
     },
     postImage() {
-      return { backgroundImage: `url('${this.post.url}')` };
+      return { backgroundImage: `url('${this.post.thumbnail}')` };
     },
   },
   emits: ['update'],
   methods: {
+    removePost: function () {
+      console.log(this.post);
+      this.$store.dispatch('deletePost', this.post);
+      this.$emit('update', null);
+    },
     selectPost: function () {
       this.$emit('update', this.post);
     },

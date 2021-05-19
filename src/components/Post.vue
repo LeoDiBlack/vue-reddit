@@ -1,8 +1,9 @@
 <template lang="html">
-  <div class="flex flex-1 my-4 text-center">
-    <div class="" style="width: 350px;">
+  <div v-if="post" class="flex justify-center my-4">
+    <div style="width: 350px;">
+      <h2 class="text-black leading-none my-4">Posted By: {{ post.author }} </h2>
       <a :href="post.url" target="_blank">
-        <img :src="post.url" class="rounded-lg shadow-xl mb-4" alt="">
+        <img :src="postImage" class="rounded-lg shadow-xl mb-4" alt="">
       </a>
       <div class="text-center">
         <h5 class="text-xl font-semibold mb-2">{{ post.title }}</h5>
@@ -13,10 +14,19 @@
 </template>
 
 <script>
+const redditImage = 'https://external-preview.redd.it/iDdntscPf-nfWKqzHRGFmhVxZm4hZgaKe5oyFws-yzA.png?auto=webp&s=38648ef0dc2c3fce76d5e1d8639234d8da0152b2';
 export default {
   name: 'Post',
   props: {
-    post: {},
+    post: {
+      type: Object,
+      default: null,
+    },
+  },
+  computed: {
+    postImage() {
+      return this.post.url.includes('jpg') ? this.post.url : redditImage;
+    },
   },
 };
 </script>
