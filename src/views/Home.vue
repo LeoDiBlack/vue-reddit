@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="vue-reddit container mx-auto">
-    <div class="flex flex-wrap bg-gray-200 mx-2">
+    <div class="flex flex-wrap bg-gray-200 rounded-t-lg mx-2">
       <aside
         class="vue-reddit-sidebar__mobile flex flex-wrap h-screen
           md:hidden bg-gray-800 w-9/12"
@@ -60,7 +60,7 @@
           </button>
         </div>
       </aside>
-      <div class="flex-wrap h-screen hidden md:flex w-full bg-gray-800 lg:w-4/12">
+      <div class="flex-wrap h-screen hidden md:flex w-full bg-gray-800 rounded-t-lg lg:w-4/12">
         <h2
           class="text-black font-bold text-xl py-2 px-6 bg-white w-full rounded-t-lg"
         >
@@ -82,11 +82,14 @@
         <div class="flex w-full justify-center sidebar-cta">
           <div class="inline-flex">
             <button
+              @click="previousPage"
+              :disabled="currentPage == 0"
               class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
             >
               Prev
             </button>
             <button
+              @click="nextPage"
               class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
             >
               Next
@@ -145,8 +148,14 @@ export default {
     };
   },
   computed: {
+    currentPage() {
+      return this.$store.getters.getCurrentPage;
+    },
     postsToRender() {
       return this.$store.getters.getPosts;
+    },
+    rawPosts() {
+      return this.$store.getters.getRawPosts;
     },
   },
   mounted() {
@@ -162,15 +171,35 @@ export default {
       this.posts = [];
       this.selectedPost = null;
     },
-    getPosts: function () {
-      Api().get('top.json', { after: this.posts.data.after })
-        .then((response) => {
-          this.$store.dispatch('pushPosts', response.data.data.children);
-          this.posts = response.data;
-        });
+    getPosts: function (params) {
+      console.log(params);
+      if (this.rawPosts.length - 1 === this.currentPage) {
+        Api().get('top.json', { params })
+          .then((response) => {
+            if (params.after) {
+              this.$store.dispatch('nextPage', response.data);
+            } else {
+              this.$store.dispatch('previousPage', response.data);
+            }
+            this.posts = response.data;
+          });
+      } else {
+        // eslint-disable-next-line
+        if (params.after) {
+          this.$store.dispatch('nextPage', this.rawPosts[this.currentPage]);
+        } else {
+          this.$store.dispatch('previousPage', this.rawPosts[this.currentPage]);
+        }
+      }
+    },
+    nextPage: function () {
+      this.getPosts({ after: this.rawPosts[this.currentPage].data.after });
     },
     onPostSelection: function (selectedPost) {
       this.selectedPost = selectedPost;
+    },
+    previousPage: function () {
+      this.getPosts({ before: this.rawPosts[this.currentPage].data.before });
     },
   },
 };
