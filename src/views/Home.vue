@@ -1,7 +1,66 @@
 <template lang="html">
   <div class="vue-reddit container mx-auto">
     <div class="flex flex-wrap bg-gray-200 mx-2">
-      <div class="flex flex-wrap h-screen w-full lg:w-4/12">
+      <aside
+        class="vue-reddit-sidebar__mobile flex flex-wrap h-screen
+          md:hidden bg-gray-800 w-9/12"
+      >
+        <h2
+          class="text-black font-bold text-xl py-2 px-6 bg-white w-full rounded-t-lg"
+        >
+          Reddit Posts
+        </h2>
+        <div class="vue-reddit-sidebar w-full sidebar-posts overflow-y-scroll">
+          <transition-group
+            name="fade"
+            mode="out-in"
+          >
+            <PostPreview
+              v-for="post in postsToRender"
+              :key="post.data.id"
+              @update="onPostSelection"
+              :post="post"
+            />
+          </transition-group>
+        </div>
+        <div class="flex w-full justify-center sidebar-cta">
+          <div class="inline-flex">
+            <button
+              class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+            >
+              Prev
+            </button>
+            <button
+              class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+        <div class="flex w-full justify-center sidebar-cta">
+          <button
+            @click="dismissPosts()"
+            class="bg-gray-300
+              hover:bg-gray-400
+              text-gray-800
+              font-bold py-2 px-4 rounded inline-flex items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 0 24 24"
+              width="24px"
+              fill="#000000"
+            >
+              <path d="M0 0h24v24H0z" fill="none"/>
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9
+                2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            </svg>
+            <span>Dismiss All</span>
+          </button>
+        </div>
+      </aside>
+      <div class="flex-wrap h-screen hidden md:flex w-full bg-gray-800 lg:w-4/12">
         <h2
           class="text-black font-bold text-xl py-2 px-6 bg-white w-full rounded-t-lg"
         >
@@ -93,7 +152,7 @@ export default {
   mounted() {
     Api().get('top.json')
       .then((response) => {
-        this.$store.dispatch('pushPosts', response.data.data.children);
+        this.$store.dispatch('pushPosts', response.data);
         this.posts = response.data;
       });
   },
@@ -118,7 +177,6 @@ export default {
 </script>
 <style lang="scss">
 .vue-reddit{
-
   /* Vue Transitions */
   .fade-enter-active,
   .fade-leave-active {
@@ -130,6 +188,20 @@ export default {
   .fade-enter,
   .fade-leave-active {
     opacity: 0;
+  }
+
+   &-sidebar__mobile {
+    position:absolute;
+    left:-270px;
+    cursor:pointer;
+    transition:all 0.8s ease-in-out;
+    -moz-transition:all 0.8s ease-in-out;
+    -o-transition:all 0.8s ease-in-out;
+    -webkit-transition:all 0.8s ease-in-out;
+
+    &:hover {
+      left:0;
+    }
   }
 
   &-sidebar::-webkit-scrollbar {

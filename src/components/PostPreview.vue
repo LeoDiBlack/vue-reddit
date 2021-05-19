@@ -1,12 +1,12 @@
 <template lang="html">
-  <div @click="selectPost" class="flex flex-1 my-4 cursor-pointer">
+  <div @click="selectPost" class="md:flex md:flex-1 m-6 md:m-4 cursor-pointer">
     <div
-      class="h-52 flex flex-1 border-r border-b border-l border-grey-light border-l-0
+      class="md:flex md:flex-1 border-r border-b border-l border-grey-light border-l-0
         border-t border-grey-light bg-white rounded-b rounded-b-none
         rounded-r p-4 justify-between leading-normal"
       :title="post.data.title"
     >
-      <div class="w-6/12">
+      <div class="w-full md:w-6/12">
         <img :src="post.data.thumbnail"
           :width="post.data.thumbnail_width"
           :height="post.data.thumbnail_height"
@@ -14,7 +14,7 @@
           :alt="post.data.title"
         >
       </div>
-      <div class="w-6/12">
+      <div class="w-full md:w-6/12">
         <p class="text-sm text-grey-dark flex items-center">
           <span v-if="post.unreadPost" class="mx-2">
             🟢

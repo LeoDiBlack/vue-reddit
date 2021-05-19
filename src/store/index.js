@@ -5,26 +5,31 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    posts: [],
+    rawPosts: [],
+    currentPostsToRender: [],
   },
   getters: {
     getPosts: function (state) {
-      return state.posts;
+      return state.currentPostsToRender;
     },
   },
   mutations: {
     dismissPosts(state) {
-      state.posts = [];
+      state.currentPostsToRender = [];
     },
     removePost(state, postToDelete) {
-      console.log(postToDelete);
-      state.posts = state.posts.filter((post) => (post.data.id !== postToDelete.data.id));
+      state.currentPostsToRender = state.currentPostsToRender.filter(
+        (post) => (post.data.id !== postToDelete.data.id),
+      );
     },
     setPosts(state, posts) {
-      state.posts = posts.map((post) => ({ ...post, unreadPost: true }));
+      state.rawPosts.push(posts);
+      state.currentPostsToRender = posts.data.children.map(
+        (post) => ({ ...post, unreadPost: true }),
+      );
     },
     setPostAsRead(state, postToUpdate) {
-      state.posts = state.posts.map((post) => {
+      state.currentPostsToRender = state.currentPostsToRender.map((post) => {
         const updatedPost = post;
         if (post.data.id === postToUpdate.data.id) {
           updatedPost.unreadPost = false;
