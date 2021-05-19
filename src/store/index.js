@@ -18,10 +18,19 @@ export default new Vuex.Store({
     },
     removePost(state, postToDelete) {
       console.log(postToDelete);
-      state.posts = state.posts.filter((post) => (post.data.id !== postToDelete.id));
+      state.posts = state.posts.filter((post) => (post.data.id !== postToDelete.data.id));
     },
     setPosts(state, posts) {
-      state.posts = posts;
+      state.posts = posts.map((post) => ({ ...post, unreadPost: true }));
+    },
+    setPostAsRead(state, postToUpdate) {
+      state.posts = state.posts.map((post) => {
+        const updatedPost = post;
+        if (post.data.id === postToUpdate.data.id) {
+          updatedPost.unreadPost = false;
+        }
+        return updatedPost;
+      });
     },
   },
   actions: {
@@ -34,6 +43,9 @@ export default new Vuex.Store({
     },
     pushPosts(context, payload) {
       context.commit('setPosts', payload);
+    },
+    updatePostReadState(context, payload) {
+      context.commit('setPostAsRead', payload);
     },
   },
 });

@@ -1,14 +1,24 @@
 <template lang="html">
   <div class="vue-reddit container mx-auto">
     <div class="flex flex-wrap bg-gray-200 mx-2">
-      <div class="flex flex-wrap h-screen w-4/12">
+      <div class="flex flex-wrap h-screen w-full lg:w-4/12">
+        <h2
+          class="text-black font-bold text-xl py-2 px-6 bg-white w-full rounded-t-lg"
+        >
+          Reddit Posts
+        </h2>
         <div class="vue-reddit-sidebar w-full sidebar-posts overflow-y-scroll">
-          <PostPreview
-            v-for="post in postsToRender"
-            :key="post.data.id"
-            @update="onPostSelection"
-            :post="post.data"
-          />
+          <transition-group
+            name="fade"
+            mode="out-in"
+          >
+            <PostPreview
+              v-for="post in postsToRender"
+              :key="post.data.id"
+              @update="onPostSelection"
+              :post="post"
+            />
+          </transition-group>
         </div>
         <div class="flex w-full justify-center sidebar-cta">
           <div class="inline-flex">
@@ -33,19 +43,28 @@
               font-bold py-2 px-4 rounded inline-flex items-center"
           >
             <svg
-              class="fill-current w-4 h-4 mr-2"
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
+              height="24px"
+              viewBox="0 0 24 24"
+              width="24px"
+              fill="#000000"
             >
-              <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9
+                2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
             </svg>
             <span>Dismiss All</span>
           </button>
         </div>
       </div>
-      <div class="flex flex-wrap w-8/12 overflow-hidden">
+      <div class="flex flex-wrap w-full lg:w-8/12 overflow-hidden">
         <div class="w-full overflow-hidden">
-          <Post :post="selectedPost"/>
+          <transition
+            name="fade"
+            mode="out-in"
+          >
+            <Post :post="selectedPost"/>
+          </transition>
         </div>
       </div>
     </div>
@@ -99,6 +118,20 @@ export default {
 </script>
 <style lang="scss">
 .vue-reddit{
+
+  /* Vue Transitions */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition-duration: 0.3s;
+    transition-property: opacity;
+    transition-timing-function: ease;
+  }
+
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0;
+  }
+
   &-sidebar::-webkit-scrollbar {
     display: none;
   }
@@ -106,11 +139,14 @@ export default {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .sidebar-title {
+    height: 5%;
+  }
   .sidebar-posts {
-    height: 88%;
+    height: 85%;
   }
   .sidebar-cta {
-    height: 6%;
+    height: 5%;
   }
 }
 </style>
