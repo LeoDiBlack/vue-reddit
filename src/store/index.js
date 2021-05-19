@@ -41,10 +41,12 @@ export default new Vuex.Store({
     },
     getNextPosts(state, posts) {
       if (state.rawPosts.length - 1 === state.currentPage) {
+        console.log('last page');
         this.commit('setPosts', posts);
         state.currentPage += 1;
       } else {
-        state.currentPostsToRender = state.rawPosts[state.currentPage].data.children;
+        console.log('not last page');
+        state.currentPostsToRender = state.rawPosts[state.currentPage + 1].data.children;
         state.currentPage += 1;
       }
     },
